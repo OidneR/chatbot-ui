@@ -9,6 +9,7 @@ import { get } from "@vercel/edge-config"
 import { Metadata } from "next"
 import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
+import Link from "next/link"
 
 export const metadata: Metadata = {
   title: "Login"
@@ -126,8 +127,7 @@ export default async function Login({
       email,
       password,
       options: {
-        // USE IF YOU WANT TO SEND EMAIL VERIFICATION, ALSO CHANGE TOML FILE
-        // emailRedirectTo: `${origin}/auth/callback`
+        emailRedirectTo: `${origin}/auth/callback`
       }
     })
 
@@ -135,11 +135,7 @@ export default async function Login({
       console.error(error)
       return redirect(`/login?message=${error.message}`)
     }
-
-    return redirect("/setup")
-
-    // USE IF YOU WANT TO SEND EMAIL VERIFICATION, ALSO CHANGE TOML FILE
-    // return redirect("/login?message=Check email to continue sign in process")
+    return redirect("/login?message=Check email to continue sign in process")
   }
 
   const handleResetPassword = async (formData: FormData) => {
@@ -193,12 +189,12 @@ export default async function Login({
           Login
         </SubmitButton>
 
-        <SubmitButton
-          formAction={signUp}
-          className="border-foreground/20 mb-2 rounded-md border px-4 py-2"
-        >
-          Sign Up
-        </SubmitButton>
+        <div className="text-muted-foreground mt-1 flex justify-center text-sm">
+          <span className="mr-1">Don't have an account?</span>
+          <Link href="/signup" className="text-primary ml-1 underline hover:opacity-80">
+            Sign Up
+          </Link>
+        </div>
 
         <div className="text-muted-foreground mt-1 flex justify-center text-sm">
           <span className="mr-1">Forgot your password?</span>
